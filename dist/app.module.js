@@ -14,11 +14,25 @@ const auth_module_1 = require("./auth/auth.module");
 const top_page_module_1 = require("./top-page/top-page.module");
 const product_module_1 = require("./product/product.module");
 const review_module_1 = require("./review/review.module");
+const config_1 = require("@nestjs/config");
+const nestjs_typegoose_1 = require("nestjs-typegoose");
+const mongo_config_1 = require("./configs/mongo.config");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
     (0, common_1.Module)({
-        imports: [auth_module_1.AuthModule, top_page_module_1.TopPageModule, product_module_1.ProductModule, review_module_1.ReviewModule],
+        imports: [
+            config_1.ConfigModule.forRoot(),
+            nestjs_typegoose_1.TypegooseModule.forRootAsync({
+                imports: [config_1.ConfigModule],
+                inject: [config_1.ConfigService],
+                useFactory: mongo_config_1.getMongoConfig
+            }),
+            auth_module_1.AuthModule,
+            top_page_module_1.TopPageModule,
+            product_module_1.ProductModule,
+            review_module_1.ReviewModule
+        ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],
     })
